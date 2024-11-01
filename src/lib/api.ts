@@ -28,19 +28,6 @@ export async function getCategories(): Promise<CategoryType[]> {
     }
 }
 
-export async function getOrders(): Promise<Order[]> {
-    const response = await fetch(`${BASE_URL}/orders`, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch orders')
-    }
-
-    return response.json()
-}
 
 export async function createOrder(orderData: {
     products: { quantity: number; id: number | undefined }[]

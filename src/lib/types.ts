@@ -43,16 +43,6 @@ export type OrderContextType = {
     total: number;
 }
 
-
-export type OrderProductType = {
-    id?: number;
-    quantity: number;
-}
-
-export type OrderCreateType = {
-    products: OrderItemType[];
-}
-
 export type Order = {
     id: number
     products: {
