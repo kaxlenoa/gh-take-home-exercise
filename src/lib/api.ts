@@ -79,9 +79,9 @@ export async function getOrderById(id: number): Promise<InitialOrderType> {
 }
 
 
-export async function updateOrder(orderId: number, orderData: OrderUpdateType): Promise<Order> {
+export async function updateOrder(orderId: number, orderData: OrderUpdateType) {
     try {
-        const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
+        const response = await fetch(`${BASE_URL}/orders/${orderId}?norandom`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,8 +92,6 @@ export async function updateOrder(orderId: number, orderData: OrderUpdateType): 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        return await response.json();
     } catch (error) {
         console.error('Error updating order:', error);
         throw error;
@@ -102,7 +100,7 @@ export async function updateOrder(orderId: number, orderData: OrderUpdateType): 
 
 export async function purchaseOrder(orderId: number): Promise<Order | null> {
     try {
-        const response = await fetch(`${BASE_URL}/orders/${orderId}/buy`, {
+        const response = await fetch(`${BASE_URL}/orders/${orderId}/buy/?norandom`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

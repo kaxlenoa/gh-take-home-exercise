@@ -48,9 +48,6 @@ export function OrderDetails({ initialOrder }: OrderDetailsProps) {
                 <div className="flex justify-between items-start mb-6">
                     <div>
                         <h1 className="text-2xl font-bold mb-2">Order #{order.id}</h1>
-                        <p className="text-sm text-gray-500">
-                            Created at: {new Date(order.createdAt).toLocaleString()}
-                        </p>
                     </div>
                     <div className="px-3 py-1 rounded-full text-sm font-medium" style={{
                         backgroundColor: getStatusColor(order.status).bg,

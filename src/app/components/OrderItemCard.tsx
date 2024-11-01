@@ -30,11 +30,11 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
         };
 
         try {
-            await updateOrder(orderId, data as OrderUpdateType)
-            setSelectedQuantity(newQuantity)
+            await updateOrder(orderId, data as OrderUpdateType).then(() => {
+                setSelectedQuantity(newQuantity)
+            })
         } catch (error) {
             console.error('Failed to update quantity:', error)
-            setSelectedQuantity(item.quantity)
         } finally {
             setIsProcessing(false)
         }
