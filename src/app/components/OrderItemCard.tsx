@@ -68,7 +68,6 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
                             size="icon"
                             onClick={() => handleUpdateQuantity(selectedQuantity - 1)}
                             className="h-8 w-8"
-                            disabled={isProcessing || selectedQuantity <= 1}
                             aria-label="Decrease quantity"
                         >
                             <Minus className="h-4 w-4" />
@@ -79,7 +78,6 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
                             size="icon"
                             onClick={() => handleUpdateQuantity(selectedQuantity + 1)}
                             className="h-8 w-8"
-                            disabled={isProcessing}
                             aria-label="Increase quantity"
                         >
                             <Plus className="h-4 w-4" />
