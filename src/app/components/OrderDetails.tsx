@@ -7,6 +7,7 @@ import { OrderItemCard } from "@/app/components/OrderItemCard"
 import OrderTotal from "@/app/components/OrderTotal"
 import { useState, useCallback } from "react"
 import { getOrderById } from "@/lib/api"
+import { useOrder } from "@/context/OrderContext";
 
 interface OrderDetailsProps {
     initialOrder: InitialOrderType
@@ -16,6 +17,7 @@ export function OrderDetails({ initialOrder }: OrderDetailsProps) {
 
     const [order, setOrder] = useState<InitialOrderType>(initialOrder)
 
+    const { items } = useOrder();
     const refreshOrder = useCallback(async () => {
         try {
             const updatedOrder = await getOrderById(order.id)
@@ -25,8 +27,7 @@ export function OrderDetails({ initialOrder }: OrderDetailsProps) {
         }
     }, [order.id])
 
-    // Calculate total whenever order changes
-    const orderTotal = order.products.reduce(
+    const orderTotal = items?.reduce(
         (sum: number, item: OrderItemType) =>
             sum + (item?.product.price * item?.quantity),
         0
@@ -58,7 +59,7 @@ export function OrderDetails({ initialOrder }: OrderDetailsProps) {
                 </div>
 
                 <div className="space-y-4">
-                    {order.products.map((item: OrderItemType) => (
+                    {items?.map((item: OrderItemType) => (
                         <OrderItemCard
                             key={item.product.id}
                             item={item}
