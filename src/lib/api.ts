@@ -4,7 +4,7 @@ const BASE_URL = 'https://gh-fe-exercise-api-4f80a724b506.herokuapp.com/api';
 
 export async function getProducts(): Promise<ProductType[]> {
     try {
-        const response = await fetch(`${BASE_URL}/products?norandom`)
+        const response = await fetch(`${BASE_URL}/products?norandom=true`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -17,7 +17,7 @@ export async function getProducts(): Promise<ProductType[]> {
 
 export async function getCategories(): Promise<CategoryType[]> {
     try {
-        const response = await fetch(`${BASE_URL}/categories?norandom`)
+        const response = await fetch(`${BASE_URL}/categories?norandom=true`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -33,7 +33,7 @@ export async function createOrder(orderData: {
     products: { quantity: number; id: number | undefined }[]
 }): Promise<Order> {
     try {
-        const response = await fetch(`${BASE_URL}/orders?norandom`, {
+        const response = await fetch(`${BASE_URL}/orders?norandom=true`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export async function createOrder(orderData: {
 
 export async function getOrderById(id: number): Promise<InitialOrderType> {
     try {
-        const response = await fetch(`${BASE_URL}/orders/${id}?norandom`)
+        const response = await fetch(`${BASE_URL}/orders/${id}?norandom=true`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -68,7 +68,7 @@ export async function getOrderById(id: number): Promise<InitialOrderType> {
 
 export async function updateOrder(orderId: number, orderData: OrderUpdateType) {
     try {
-        const response = await fetch(`${BASE_URL}/orders/${orderId}?norandom`, {
+        const response = await fetch(`${BASE_URL}/orders/${orderId}?norandom=true`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export async function updateOrder(orderId: number, orderData: OrderUpdateType) {
 
 export async function purchaseOrder(orderId: number): Promise<Order | null> {
     try {
-        const response = await fetch(`${BASE_URL}/orders/${orderId}/buy/?norandom`, {
+        const response = await fetch(`${BASE_URL}/orders/${orderId}/buy?norandom=true`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
