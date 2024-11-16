@@ -7,7 +7,7 @@ import { formatCurrency } from "@/lib/utils"
 import { createOrder } from "@/lib/api"
 
 export default function OrderSummary() {
-    const { items, total, clearOrder } = useOrder()
+    const { items, total } = useOrder()
     const itemCount = items.reduce((sum, item) => sum + item?.quantity, 0)
     const router = useRouter()
     const { addToHistory } = useOrderHistory()
@@ -22,8 +22,6 @@ export default function OrderSummary() {
             }
 
             const createdOrder = await createOrder(orderData)
-            console.log(createdOrder, 'createdOrder')
-            clearOrder()
             addToHistory(createdOrder)
             router.push(`/cart/${createdOrder.id}`)
         } catch (error) {

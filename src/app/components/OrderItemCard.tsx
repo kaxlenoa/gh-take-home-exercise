@@ -1,27 +1,28 @@
 'use client'
 
-import { OrderItemType, OrderUpdateType } from "@/lib/types"
-import { updateOrder } from "@/lib/api"
+import {OrderItemType, OrderUpdateType} from "@/lib/types"
 import { useOrder } from "@/context/OrderContext"
 import { formatCurrency } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Minus, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
+import {updateOrder} from "@/lib/api";
 
 interface OrderItemCardProps {
     item: OrderItemType
-    orderId: number
     status: string
+    orderId: number
 }
 
-export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
-    const { removeItem } = useOrder()
+export function OrderItemCard({ item, orderId,  status }: OrderItemCardProps) {
+    const { updateQuantity, removeItem } = useOrder()
     const [isProcessing, setIsProcessing] = useState(false)
-    const [selectedQuantity, setSelectedQuantity] = useState(item.quantity)
 
-    const handleUpdateQuantity = async (newQuantity: number) => {
-        if (newQuantity < 1) return
-        setIsProcessing(true)
+
+    const handleQuantityChange = async (newQuantity: number) => {
+        if (newQuantity < 1) {
+        //   await handleRemoveItem()
+        }
 
         const data = {
             action: "update_quantity",
@@ -29,10 +30,11 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
             quantity: newQuantity
         };
 
+
         try {
-            await updateOrder(orderId, data as OrderUpdateType).then(() => {
-                setSelectedQuantity(newQuantity)
-            })
+            setIsProcessing(true)
+            await updateQuantity(item.product.id, newQuantity);
+            await updateOrder(orderId, data as OrderUpdateType)
         } catch (error) {
             console.error('Failed to update quantity:', error)
         } finally {
@@ -41,8 +43,8 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
     }
 
     const handleRemoveItem = async () => {
-        setIsProcessing(true)
         try {
+            setIsProcessing(true)
             await removeItem(item.product.id)
         } catch (error) {
             console.error('Failed to remove item:', error)
@@ -56,7 +58,7 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
             <div className="flex-1">
                 <h3 className="font-semibold">{item.product.name}</h3>
                 <p className="text-gray-500 text-sm">Category: {item.product.category.name}</p>
-                {status === 'PURCHASED' && <p className="text-gray-500 text-sm">Quantity: {item.quantity}</p>}
+                <p className="text-gray-500 text-sm">Quantity: {item.quantity}</p>
                 <p className="text-gray-700">{formatCurrency(item.product.price)}</p>
             </div>
 
@@ -66,19 +68,19 @@ export function OrderItemCard({ item, orderId, status }: OrderItemCardProps) {
                         <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => handleUpdateQuantity(selectedQuantity - 1)}
+                            onClick={() => handleQuantityChange(item.quantity - 1)}
+                            disabled={isProcessing || item.quantity <= 1}
                             className="h-8 w-8"
-                            aria-label="Decrease quantity"
                         >
                             <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="w-8 text-center">{selectedQuantity}</span>
+                        <span className="w-8 text-center">{item.quantity}</span>
                         <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => handleUpdateQuantity(selectedQuantity + 1)}
+                            onClick={() => handleQuantityChange(item.quantity + 1)}
+                            disabled={isProcessing}
                             className="h-8 w-8"
-                            aria-label="Increase quantity"
                         >
                             <Plus className="h-4 w-4" />
                         </Button>
